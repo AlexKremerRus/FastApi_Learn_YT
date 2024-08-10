@@ -12,3 +12,9 @@ def get_name(name: int, state: str = None):
         return {"message": f"Hello {name}"}
     else:
         return {"message": f"Hello {name} - {state}"}
+
+
+@app.get("/user/{name}/item/{item}")
+def get_user_item(name: str, item: int):
+    return {"message": f"Hello {name} - {item}"}
+
