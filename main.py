@@ -1,5 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Query
 from schemas import Book
+from typing import List
+
 
 app = FastAPI()
 
@@ -7,8 +9,9 @@ app = FastAPI()
 def hello():
     return {"message": "Hello World"}
 
-@app.get("/{name}")
+@app.get("/item/{name}")
 def get_name(name: int, state: str = None):
+    # print(name)
     if state is None:
         return {"message": f"Hello {name}"}
     else:
@@ -20,5 +23,10 @@ def get_user_item(name: str, item: int):
     return {"message": f"Hello {name} - {item}"}
 
 @app.post("/book")
-def create_book(book: Book):
-    return book
+def create_book(item: Book):
+    return item
+
+@app.get("/books")
+def get_books_test(e: List[str] = Query( description='search book')):  #, min_length=2, max_length=5
+    print(e)
+    return {"e": e}
