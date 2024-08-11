@@ -1,5 +1,5 @@
-from fastapi import FastAPI, Query, Path
-from schemas import Book
+from fastapi import FastAPI, Query, Path, Body
+from schemas import Book, Author
 from typing import List
 
 
@@ -24,8 +24,13 @@ def get_user_item(name: str, item: int):
 
 # работа с body и post параметрами
 @app.post("/book")
-def create_book(item: Book):
-    return item
+def create_book(item: Book, author: Author, quantity: int = Body(...)):
+    return {"item": item, "author": author, "quantity": quantity}
+
+# создания Автора c Body параметрами with embed 
+@app.post("/author")
+def create_author(author: Author = Body(..., embed=True)):
+    return {"author": author}
 
 # работа с query параметрами
 @app.get("/books")

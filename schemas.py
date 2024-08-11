@@ -5,6 +5,11 @@ from typing import List
 class Genres(BaseModel):
     name: str
 
+class Author(BaseModel):
+    first_name: str
+    last_name: str
+    age: int
+
 class Book(BaseModel):
     title: str
     writer: str
