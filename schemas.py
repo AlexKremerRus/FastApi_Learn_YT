@@ -1,4 +1,4 @@
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, validator,field_validator, Field
 from datetime import date
 from typing import List
 
@@ -10,11 +10,11 @@ class Author(BaseModel):
     last_name: str
     age: int
 
-#validator - но говорят по документации его лучше уже не использовать 
-    @validator('age')
+#field_validator - для валидации данных
+    @field_validator('age')
     def check_age(cls, v):
         if v < 15:
-            raise ValueError('Age must be positive')
+            raise ValueError('Нельзя чтобы возраст был меньше 15')
         return v
 
 class Book(BaseModel):
@@ -24,4 +24,4 @@ class Book(BaseModel):
     date: date
     summary: str
     genres: List[Genres]
-    pages: int
+    pages: int = Field(..., gt=10, lt=1000, description="не может быть меньше 10 и больше 1000")
