@@ -17,11 +17,15 @@ class Author(BaseModel):
             raise ValueError('Нельзя чтобы возраст был меньше 15')
         return v
 
+class AuthorOut(Author):
+    id: int
+
+#если есть приравнивание то это значит что это не обязательный элемент
 class Book(BaseModel):
     title: str
     writer: str
     duration: str
     date: date
     summary: str
-    genres: List[Genres]
+    genres: List[Genres] = []
     pages: int = Field(..., gt=10, lt=1000, description="не может быть меньше 10 и больше 1000")
