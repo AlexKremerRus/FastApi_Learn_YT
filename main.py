@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Query, Path, Body
-from schemas import Book, Author
+from schemas import Book, Author, AuthorOut
 from typing import List
 
 
@@ -23,14 +23,19 @@ def get_user_item(name: str, item: int):
     return {"message": f"Hello {name} - {item}"}
 
 # работа с body и post параметрами
-@app.post("/book")
+# добавляем респонс модель для отображения респонса в доке и валидации ответа согласно модели, response_model_exclude_defaults - не показывает в респонс модели дефолтные значения пустые например
+# response_model_exclude='summary' - не показывает в респонс модели summary
+@app.post("/book", response_model=Book, response_model_exclude_defaults=True, response_model_exclude={'summary'})
 def create_book(item: Book, author: Author, quantity: int = Body(...)):
-    return {"item": item, "author": author, "quantity": quantity}
+    # return {"item": item, "author": author, "quantity": quantity}
+    return item
 
-# создания Автора c Body параметрами with embed 
-@app.post("/author")
+# создания Автора c Body параметрами with embed
+@app.post("/author", response_model=AuthorOut)
 def create_author(author: Author = Body(..., embed=True)):
-    return {"author": author}
+    autor_dict = author.model_dump()
+    autor_dict['id'] = 1
+    return autor_dict 
 
 # работа с query параметрами
 @app.get("/books")
